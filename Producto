@@ -1,0 +1,148 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Scanner;
+
+class Producto {
+    private String nombre;
+    private double precio;
+
+    public Producto(String nombre, double precio) {
+        this.nombre = nombre;
+        this.precio = precio;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    @Override
+    public String toString() {
+        return "Nombre: " + nombre + ", Precio: $" + precio;
+    }
+}
+
+public class TiendaLentes {
+    private ArrayList<Producto> inventario;
+    private Scanner scanner;
+
+    public TiendaLentes() {
+        inventario = new ArrayList<>();
+        scanner = new Scanner(System.in);
+    }
+
+    public void agregarProducto() {
+        System.out.println("Ingrese el nombre del producto:");
+        String nombre = scanner.nextLine();
+        System.out.println("Ingrese el precio del producto:");
+        double precio = scanner.nextDouble();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+
+        Producto nuevoProducto = new Producto(nombre, precio);
+        inventario.add(nuevoProducto);
+        System.out.println("Producto agregado: " + nuevoProducto);
+    }
+
+    public void eliminarProducto() {
+        System.out.println("Ingrese el nombre del producto a eliminar:");
+        String nombreEliminar = scanner.nextLine();
+
+        Iterator<Producto> iter = inventario.iterator();
+        boolean eliminado = false;
+        while (iter.hasNext()) {
+            Producto producto = iter.next();
+            if (producto.getNombre().equalsIgnoreCase(nombreEliminar)) {
+                iter.remove();
+                eliminado = true;
+                System.out.println("Producto eliminado: " + producto);
+                break;
+            }
+        }
+
+        if (!eliminado) {
+            System.out.println("Producto no encontrado.");
+        }
+    }
+
+    public void buscarProducto() {
+        System.out.println("Ingrese el nombre del producto a buscar:");
+        String nombreBuscar = scanner.nextLine();
+
+        boolean encontrado = false;
+        for (Producto producto : inventario) {
+            if (producto.getNombre().equalsIgnoreCase(nombreBuscar)) {
+                System.out.println("Producto encontrado: " + producto);
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            System.out.println("Producto no encontrado.");
+        }
+    }
+
+    public void ordenarProductos() {
+        Collections.sort(inventario, Comparator.comparing(Producto::getNombre));
+        System.out.println("Lista de productos ordenada por nombre:");
+        for (Producto producto : inventario) {
+            System.out.println(producto);
+        }
+    }
+
+    public void imprimirListaProductos() {
+        System.out.println("Lista de productos:");
+        for (Producto producto : inventario) {
+            System.out.println(producto);
+        }
+    }
+
+    public static void main(String[] args) {
+        TiendaLentes tienda = new TiendaLentes();
+        Scanner scanner = new Scanner(System.in);
+        int opcion;
+
+        do {
+            System.out.println("\nMenu:");
+            System.out.println("1. Agregar Producto");
+            System.out.println("2. Eliminar Producto");
+            System.out.println("3. Buscar Producto");
+            System.out.println("4. Ordenar Productos por Nombre");
+            System.out.println("5. Imprimir Lista de Productos");
+            System.out.println("6. Salir");
+            System.out.println("Ingrese el número de la opción:");
+
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer de entrada
+
+            switch (opcion) {
+                case 1:
+                    tienda.agregarProducto();
+                    break;
+                case 2:
+                    tienda.eliminarProducto();
+                    break;
+                case 3:
+                    tienda.buscarProducto();
+                    break;
+                case 4:
+                    tienda.ordenarProductos();
+                    break;
+                case 5:
+                    tienda.imprimirListaProductos();
+                    break;
+                case 6:
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    System.out.println("Opción inválida.");
+                    break;
+            }
+        } while (opcion != 6);
+    }
+}
